@@ -2,13 +2,26 @@
 __pycache__/
 *.py[cod]
 *.sqlite3
+*.log
 
-# Virtual Environment
-venv/
-.env
+# Django
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+db.sqlite3
 
-# VS Code
+# VSCode
 .vscode/
+
+# Env
+.env
+*.env
+venv/
+ENV/
+env.bak/
+*.egg-info/
 
 # OS
 .DS_Store
