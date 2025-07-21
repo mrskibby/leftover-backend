@@ -14,12 +14,18 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from django_ratelimit.decorators import ratelimit
 from django.utils.decorators import method_decorator
+from .models import Customer
+from rest_framework.permissions import AllowAny
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+
 
 User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 @method_decorator(ratelimit(key='ip', rate='5/m', method='POST', block=True), name='post')
 class CookieTokenObtainPairView(TokenObtainPairView):
@@ -100,3 +106,29 @@ class LogoutView(APIView):
 
         except Exception as e:
             return Response({"detail": "Invalid token or already logged out."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ActivateAccountView(APIView):
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response({'detail': 'Account activated successfully.'}, status=200)
+        else:
+            return Response({'detail': 'Activation link is invalid!'}, status=400)
+
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)

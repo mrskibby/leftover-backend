@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import RestaurantProfile
+from users.models import RestaurantProfile
 
 class MenuSection(models.Model):
     restaurant = models.ForeignKey(RestaurantProfile, on_delete=models.CASCADE, related_name='menu_sections')

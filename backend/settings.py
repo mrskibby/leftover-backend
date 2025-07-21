@@ -45,13 +45,19 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
-    'accounts',
+    'users',
     'menu',
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'users.authentication.CookieJWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
 }
 
@@ -65,7 +71,7 @@ SIMPLE_JWT = {
     # these are for cookie-based JWT
     'AUTH_COOKIE': 'access_token',  # Name of the access token cookie
     'AUTH_COOKIE_REFRESH': 'refresh_token',  # Name of the refresh token cookie
-    'AUTH_COOKIE_SECURE': True,        # Only send cookie over HTTPS
+    'AUTH_COOKIE_SECURE': False,        # Only send cookie over HTTPS
     'AUTH_COOKIE_HTTP_ONLY': True,     # Prevent access from JavaScript
     'AUTH_COOKIE_PATH': '/',           # Path the cookie is valid for
     'AUTH_COOKIE_SAMESITE': 'Lax',     # Or 'Strict'
@@ -116,7 +122,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'accounts.User'
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
