@@ -1,28 +1,53 @@
 # Python
 __pycache__/
 *.py[cod]
-*.sqlite3
-*.log
-
-# Django
-*.pot
-*.pyc
 *.pyo
 *.pyd
-*.db
+*.pyc
+
+# Django
+*.log
+*.pot
+*.pyc
 db.sqlite3
-
-# VSCode
-.vscode/
-
-# Env
+*.sqlite3
+media/
+staticfiles/
 .env
+
+# Environment
+.env.*
+.envrc
 *.env
 venv/
+env/
 ENV/
-env.bak/
-*.egg-info/
 
-# OS
+# VS Code / IDEs
+.vscode/
+.idea/
+*.swp
+
+# macOS / Windows
 .DS_Store
 Thumbs.db
+
+# Docker
+*.pid
+*.pid.lock
+*.sock
+docker-compose.override.yml
+*.tar
+*~ 
+# Optional: if using volumes in docker-compose
+volumes/
+postgres_data/
+static_volume/
+
+# Migrations (optional, if you want them auto-generated)
+# Comment this out if you want to keep migration history
+# **/migrations/
+# !**/migrations/__init__.py
+
+# Nginx config (if you generate separately for prod)
+nginx.conf
